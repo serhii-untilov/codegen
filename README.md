@@ -36,15 +36,3 @@ npm run build
 npm link   # Makes `codegen` globally available
 chmod +x dist/index.js
 ```
-
-### Test generating TS class
-
-``` sh
-npx codegen --templates ./templates/ts.class --name userPermission --output out
-```
-
-### Test generating Python class
-
-``` sh
-npx codegen --templates ./templates/python.class --name userPermission --output out
-```
