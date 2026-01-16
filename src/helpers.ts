@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
 
-export enum HelperNames {
+export enum Transform {
     CAMEL_CASE = 'camelCase',
     CAPITALIZE = 'capitalize',
     KEBAB_CASE = 'kebabCase',
@@ -69,24 +69,25 @@ export const kebabCase = (str: string) =>
  * These helpers are intentionally simple and predictable.
  */
 export function registerHelpers() {
-    Handlebars.registerHelper(HelperNames.LOWERCASE, lowercase);
-    Handlebars.registerHelper(HelperNames.UPPERCASE, uppercase);
-    Handlebars.registerHelper(HelperNames.CAPITALIZE, capitalize);
-    Handlebars.registerHelper(HelperNames.CAMEL_CASE, camelCase);
-    Handlebars.registerHelper(HelperNames.PASCAL_CASE, pascalCase);
-    Handlebars.registerHelper(HelperNames.SNAKE_CASE, snakeCase);
-    Handlebars.registerHelper(HelperNames.KEBAB_CASE, kebabCase);
+    Handlebars.registerHelper(Transform.LOWERCASE, lowercase);
+    Handlebars.registerHelper(Transform.UPPERCASE, uppercase);
+    Handlebars.registerHelper(Transform.CAPITALIZE, capitalize);
+    Handlebars.registerHelper(Transform.CAMEL_CASE, camelCase);
+    Handlebars.registerHelper(Transform.PASCAL_CASE, pascalCase);
+    Handlebars.registerHelper(Transform.SNAKE_CASE, snakeCase);
+    Handlebars.registerHelper(Transform.KEBAB_CASE, kebabCase);
 }
 
 export function getOutputFileName(file: string, artifactName: string): string {
+    // TODO: consider using a more robust templating solution
     return file
         .replace('.hbs', '')
-        .replace(`${HelperNames.LOWERCASE}(name)`, lowercase(artifactName))
-        .replace(`${HelperNames.UPPERCASE}(name)`, uppercase(artifactName))
-        .replace(`${HelperNames.CAPITALIZE}(name)`, capitalize(artifactName))
-        .replace(`${HelperNames.CAMEL_CASE}(name)`, camelCase(artifactName))
-        .replace(`${HelperNames.PASCAL_CASE}(name)`, pascalCase(artifactName))
-        .replace(`${HelperNames.SNAKE_CASE}(name)`, snakeCase(artifactName))
-        .replace(`${HelperNames.KEBAB_CASE}(name)`, kebabCase(artifactName))
+        .replace(`name.${Transform.LOWERCASE}`, lowercase(artifactName))
+        .replace(`name.${Transform.UPPERCASE}`, uppercase(artifactName))
+        .replace(`name.${Transform.CAPITALIZE}`, capitalize(artifactName))
+        .replace(`name.${Transform.CAMEL_CASE}`, camelCase(artifactName))
+        .replace(`name.${Transform.PASCAL_CASE}`, pascalCase(artifactName))
+        .replace(`name.${Transform.SNAKE_CASE}`, snakeCase(artifactName))
+        .replace(`name.${Transform.KEBAB_CASE}`, kebabCase(artifactName))
         .replace('name', artifactName);
 }
