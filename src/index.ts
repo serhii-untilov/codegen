@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { Command } from "commander";
-import path from "path";
-import fs from "fs-extra";
 import chalk from "chalk";
+import { Command } from "commander";
+import fs from "fs-extra";
+import inquirer from "inquirer";
 import ora from "ora";
+import path from "path";
 import { generate } from "./generator.js";
 
 const program = new Command();
@@ -11,9 +12,9 @@ const program = new Command();
 program.name("codegen").description("Multi-language code generation CLI").version("1.0.0");
 
 program
-  .option("-t, --templates <folder>", "Templates folder", "./templates/python.class")
-  .option("-n, --name <name>", "Name for generated artifact", "Example")
-  .option("-o, --output <folder>", "Output folder", "src");
+  .option("-t, --templates <folder|?>", "Templates folder", "./templates/python.class")
+  .option("-n, --name <name|?>", "Name for generated artifact", "Example")
+  .option("-o, --output <folder|?>", "Output folder", "src");
 
 program.parse(process.argv);
 const options = program.opts();
@@ -24,11 +25,67 @@ if (!fs.existsSync(templatesPath)) {
   process.exit(1);
 }
 
+async function resolveName(name: string): Promise<string> {
+  if (name !== "?") {
+    return name;
+  }
+
+  const { artifactName } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "artifactName",
+      message: "Enter name for generated artifact:",
+      validate: (input: string) =>
+        input.trim().length > 0 || "Name cannot be empty",
+    },
+  ]);
+
+  return artifactName;
+}
+
+async function resolveOutputFolder(name: string): Promise<string> {
+  if (name !== "?") {
+    return name;
+  }
+
+  const { outputFolderName } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "outputFolderName",
+      message: "Enter name for the output folder name:",
+      validate: (input: string) =>
+        input.trim().length > 0 || "Folder name cannot be empty",
+    },
+  ]);
+
+  return outputFolderName;
+}
+
+async function resolveTemplateName(name: string): Promise<string> {
+  if (name !== "?") {
+    return name;
+  }
+
+  const { templateName } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "templateName",
+      message: "Enter name for generated template:",
+      validate: (input: string) =>
+        input.trim().length > 0 || "Name cannot be empty",
+    },
+  ]);
+
+  return templateName;
+}
+
 (async () => {
   const spinner = ora("Generating...").start();
 
   try {
-    await generate(templatesPath, options.name, options.output);
+    const name = await resolveName(options.name);
+    const output = await resolveOutputFolder(options.output)
+    await generate(templatesPath, name, output);
     spinner.succeed("Generation completed!");
   } catch (err: any) {
     spinner.fail("Generation failed.");

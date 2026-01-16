@@ -29,6 +29,7 @@
     "fs-extra": "^11.3.3",
     "glob": "^13.0.0",
     "handlebars": "^4.7.8",
+    "inquirer": "^13.2.0",
     "ora": "^9.0.0"
   },
   "devDependencies": {
