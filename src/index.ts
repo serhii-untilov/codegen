@@ -5,20 +5,17 @@ import path from "path";
 import fs from "fs-extra";
 import chalk from "chalk";
 import ora from "ora";
-import { generateTSClass } from "./generators/ts-class.js";
-import { generatePythonClass } from "./generators/python-class.js";
+import { generate } from "./generators/index.js";
 
 const program = new Command();
 
-program
-  .name("codegen")
-  .description("Multi-language code generation CLI")
-  .version("0.1.0");
+program.name("codegen").description("Multi-language code generation CLI").version("1.0.0");
 
 program
-  .option("-t, --templates <folder>", "Path to templates folder", "./templates")
-  .option("-g, --generate <type>", "What to generate (ts-class, python-class)")
-  .option("-n, --name <name>", "Name of the artifact", "Example");
+  .option("-t, --templates <folder>", "Templates folder", "./templates")
+  .option("-g, --generate <type>", "Generator type (e.g., ts-class, python-class)")
+  .option("-n, --name <name>", "Name for generated artifact", "Example")
+  .option("-o, --output <folder>", "Output folder", "src");
 
 program.parse(process.argv);
 const options = program.opts();
@@ -33,18 +30,7 @@ if (!fs.existsSync(templatesPath)) {
   const spinner = ora("Generating...").start();
 
   try {
-    switch (options.generate) {
-      case "ts-class":
-        await generateTSClass(templatesPath, options.name);
-        break;
-      case "python-class":
-        await generatePythonClass(templatesPath, options.name);
-        break;
-      default:
-        console.log(chalk.yellow("Unknown generator type."));
-        process.exit(1);
-    }
-
+    await generate(options.generate, templatesPath, options.name, options.output);
     spinner.succeed("Generation completed!");
   } catch (err: any) {
     spinner.fail("Generation failed.");
