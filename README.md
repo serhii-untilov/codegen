@@ -12,10 +12,11 @@ npm install github:serhii-untilov/codegen
 
 ## How to generate
 
-Example for a TS class generation:
+Examples:
 
 ``` sh
-npx codegen --templates ./templates --generate ts --name User --output out
+npx codegen --templates ./templates/ts.class --name userPermission --output out
+npx codegen --templates ./templates/python.class --name userPermission --output out
 ```
 
 ## Development
