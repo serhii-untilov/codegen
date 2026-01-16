@@ -21,14 +21,6 @@ npx codegen --templates ./templates/python.class --name userPermission --output 
 
 ## Development
 
-### Init project
-
-``` sh
-npm init -y
-npm install commander fs-extra handlebars chalk ora
-npm install -D typescript @types/node @types/fs-extra @types/handlebars
-```
-
 ### Build
 
 ``` sh
