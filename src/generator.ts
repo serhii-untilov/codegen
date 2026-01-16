@@ -25,10 +25,12 @@ export async function generate(
     const template = Handlebars.compile(templateContent);
     const rendered = template({ name: artifactName });
 
-    const outputFolder = path.resolve(outputRoot, path.relative(templatesPath, path.dirname(templateFile)));
+    const relativePath = path.relative(templatesPath, path.dirname(templateFile))
+    const outputPath = getOutputFileName(relativePath, artifactName);
+    const outputFolder = path.resolve(outputRoot, outputPath);
     await fs.ensureDir(outputFolder);
 
-    const outputFileName = getOutputFileName(file, artifactName);
+    const outputFileName = getOutputFileName(path.basename(file), artifactName);
     const outputFilePath = path.join(outputFolder, outputFileName);
 
     await fs.writeFile(outputFilePath, rendered);

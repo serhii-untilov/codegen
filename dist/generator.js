@@ -16,9 +16,11 @@ export async function generate(templatesPath, artifactName, outputRoot) {
         const templateContent = await fs.readFile(templateFile, "utf-8");
         const template = Handlebars.compile(templateContent);
         const rendered = template({ name: artifactName });
-        const outputFolder = path.resolve(outputRoot, path.relative(templatesPath, path.dirname(templateFile)));
+        const relativePath = path.relative(templatesPath, path.dirname(templateFile));
+        const outputPath = getOutputFileName(relativePath, artifactName);
+        const outputFolder = path.resolve(outputRoot, outputPath);
         await fs.ensureDir(outputFolder);
-        const outputFileName = getOutputFileName(file, artifactName);
+        const outputFileName = getOutputFileName(path.basename(file), artifactName);
         const outputFilePath = path.join(outputFolder, outputFileName);
         await fs.writeFile(outputFilePath, rendered);
         console.log(chalk.green(`Generated: ${outputFilePath}`));
