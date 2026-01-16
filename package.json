@@ -7,9 +7,19 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
   },
-  "keywords": ["codegen", "cli", "typescript", "python", "nestjs", "vue", "fastapi"],
+  "keywords": [
+    "codegen",
+    "cli",
+    "typescript",
+    "python",
+    "nestjs",
+    "vue",
+    "fastapi"
+  ],
   "author": "Serhii Untilov <s.untilov@gmail.com> (https://untilov.com.ua/)",
   "license": "MIT",
   "description": "",
@@ -17,6 +27,7 @@
     "chalk": "^5.6.2",
     "commander": "^14.0.2",
     "fs-extra": "^11.3.3",
+    "glob": "^13.0.0",
     "handlebars": "^4.7.8",
     "ora": "^9.0.0"
   },
@@ -24,6 +35,13 @@
     "@types/fs-extra": "^11.0.4",
     "@types/handlebars": "^4.0.40",
     "@types/node": "^25.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-no-loops": "^0.4.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.0",
     "typescript": "^5.9.3"
   }
 }

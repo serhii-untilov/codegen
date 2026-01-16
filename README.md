@@ -1,12 +1,26 @@
 # Codegen
 
+Multi-language code generation CLI (TypeScript, Python, ...)
+
+## How to install
+
 Works in any Node project after installing via
 
 ``` sh
 npm install github:serhii-untilov/codegen
 ```
 
-## Init project
+## How to generate
+
+Example for a TS class generation:
+
+``` sh
+npx codegen --templates ./templates --generate ts --name User --output out
+```
+
+## Development
+
+### Init project
 
 ``` sh
 npm init -y
@@ -14,22 +28,22 @@ npm install commander fs-extra handlebars chalk ora
 npm install -D typescript @types/node @types/fs-extra @types/handlebars
 ```
 
-## Build & Test
+### Build
 
 ``` sh
 npm run build
 npm link   # Makes `codegen` globally available
+chmod +x dist/index.js
 ```
 
-### Test generating TS
+### Test generating TS class
 
 ``` sh
-npx codegen --templates ./templates --generate ts-class --name User
+npx codegen --templates ./templates/ts.class --name userPermission --output out
 ```
 
-
-### Test generating Python
+### Test generating Python class
 
 ``` sh
-npx codegen --templates ./templates --generate python-class --name User
+npx codegen --templates ./templates/python.class --name userPermission --output out
 ```

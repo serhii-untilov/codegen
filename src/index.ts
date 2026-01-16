@@ -1,19 +1,17 @@
 #!/usr/bin/env node
-
 import { Command } from "commander";
 import path from "path";
 import fs from "fs-extra";
 import chalk from "chalk";
 import ora from "ora";
-import { generate } from "./generators/index.js";
+import { generate } from "./generator.js";
 
 const program = new Command();
 
 program.name("codegen").description("Multi-language code generation CLI").version("1.0.0");
 
 program
-  .option("-t, --templates <folder>", "Templates folder", "./templates")
-  .option("-g, --generate <type>", "Generator type (e.g., ts-class, python-class)")
+  .option("-t, --templates <folder>", "Templates folder", "./templates/python.class")
   .option("-n, --name <name>", "Name for generated artifact", "Example")
   .option("-o, --output <folder>", "Output folder", "src");
 
@@ -30,7 +28,7 @@ if (!fs.existsSync(templatesPath)) {
   const spinner = ora("Generating...").start();
 
   try {
-    await generate(options.generate, templatesPath, options.name, options.output);
+    await generate(templatesPath, options.name, options.output);
     spinner.succeed("Generation completed!");
   } catch (err: any) {
     spinner.fail("Generation failed.");
