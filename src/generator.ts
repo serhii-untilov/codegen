@@ -4,7 +4,7 @@ import { glob } from 'glob';
 import Handlebars from 'handlebars';
 import ora from 'ora';
 import path from 'path';
-import { extractTemplateVariables, getAnswers, getOutputFileName, getUndefinedTemplateVariables, registerHelpers, Transform } from './helpers.js';
+import { getAnswers, getOutputFileName, getUndefinedTemplateVariables, registerHelpers } from './helpers.js';
 
 registerHelpers();
 
@@ -24,7 +24,9 @@ export async function generate(templatesPath: string, artifactName: string, outp
         const undefinedVariables = getUndefinedTemplateVariables(templateContent, globalVariables);
         if (undefinedVariables.length > 0) {
             spinner.stop();
-            console.log(chalk.yellow(`Template ${file} requires additional variables: ${undefinedVariables.join(', ')}`));
+            console.log(
+                chalk.yellow(`Template ${file} requires additional variables: ${undefinedVariables.join(', ')}`),
+            );
             const answers = await getAnswers(undefinedVariables);
             Object.assign(globalVariables, answers);
             spinner.start('Continuing generation...');
