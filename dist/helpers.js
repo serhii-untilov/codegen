@@ -109,16 +109,9 @@ export async function getAnswers(vars) {
 }
 export function getUndefinedTemplateVariables(templateContent, providedVars) {
     const templateVariables = extractTemplateVariables(templateContent);
+    const transformSet = new Set(Object.values(Transform));
     return templateVariables
         .filter((v) => !(v in providedVars))
-        .filter((v, i, arr) => arr.indexOf(v) === i) // unique
-        .filter((v) => !(v in [
-        Transform.CAMEL_CASE,
-        Transform.CAPITALIZE,
-        Transform.KEBAB_CASE,
-        Transform.LOWERCASE,
-        Transform.PASCAL_CASE,
-        Transform.SNAKE_CASE,
-        Transform.UPPERCASE,
-    ]));
+        .filter((v, i, arr) => arr.indexOf(v) === i)
+        .filter((v) => !transformSet.has(v));
 }
