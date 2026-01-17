@@ -1,29 +1,42 @@
 # Codegen
 
-Multi-language code generation CLI (TypeScript, Python, ...)
+Multi-language code generation CLI (TypeScript, Python, ...) by templates.
 
-## How to install
+## Install
 
-Works in any Node project after installing via
+Works in any Node project after installing via:
 
 ``` sh
 npm install -D github:serhii-untilov/codegen
 ```
 
-## How to generate code
+## Create a template
 
-Examples:
+Create a `templates` folder in the root of your project.
 
-``` sh
-npx codegen
-npx codegen --templates ./templates/python.class --name userPermission --output out
-npx codegen --templates ./templates/ts.class --name userPermission
+Create a template file, like a `templates\python.class\name.snakeCase.py.hbs`
+
+``` hbs
+class {{pascalCase name}}:
+    def __init__(self):
+        pass
 ```
 
-## How to uninstall
+## Generate code
+
+To generate code run:
 
 ``` sh
-npm uninstall codegen
+npx codegen --templates ./templates/python.class
+```
+
+The generator will prompts you about artifact name, and generates a file `src\{artifact_name}.py`
+
+## How to get help
+
+``` sh
+npx codegen --help
+npx codegen --version
 ```
 
 ## Development

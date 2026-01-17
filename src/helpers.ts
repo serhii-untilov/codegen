@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import inquirer from 'inquirer';
 
 export enum Transform {
     CAMEL_CASE = 'camelCase',
@@ -43,18 +44,17 @@ export const pascalCase = (str: string): string => {
 // user_name -> userName
 // user-name -> userName
 export const camelCase = (str: string) => {
-  const pascal = pascalCase(str);
-  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+    const pascal = pascalCase(str);
+    return pascal.charAt(0).toLowerCase() + pascal.slice(1);
 };
-
 
 // UserName -> user_name
 // userName -> user_name
 export const snakeCase = (str: string) =>
-  str
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-    .replace(/[-\s]+/g, "_")
-    .toLowerCase();
+    str
+        .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+        .replace(/[-\s]+/g, '_')
+        .toLowerCase();
 
 // UserName -> user-name
 // userName -> user-name
@@ -90,4 +90,40 @@ export function getOutputFileName(file: string, artifactName: string): string {
         .replace(`name.${Transform.SNAKE_CASE}`, snakeCase(artifactName))
         .replace(`name.${Transform.KEBAB_CASE}`, kebabCase(artifactName))
         .replace('name', artifactName);
+}
+
+export function extractTemplateVariables(source: string): string[] {
+    const ast = Handlebars.parse(source);
+    const vars = new Set<string>();
+
+    const helpers = new Set(['if', 'each', 'unless', 'with', 'log']);
+
+    function walk(node: any) {
+        if (!node) return;
+
+        if (node.type === 'MustacheStatement' || node.type === 'BlockStatement') {
+            const name = node.path?.original;
+            if (name && !helpers.has(name) && !name.startsWith('@')) {
+                vars.add(name.split('.')[0]);
+            }
+        }
+
+        for (const value of Object.values(node)) {
+            if (Array.isArray(value)) value.forEach(walk);
+            else if (typeof value === 'object') walk(value);
+        }
+    }
+
+    walk(ast);
+    return [...vars];
+}
+
+export async function getAnswers(vars: string[]): Promise<Record<string, any>> {
+    return await inquirer.prompt(
+        vars.map((name) => ({
+            type: 'input',
+            name,
+            message: `Enter ${name}:`,
+        })),
+    );
 }

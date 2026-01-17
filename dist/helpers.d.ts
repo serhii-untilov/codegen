@@ -20,3 +20,5 @@ export declare const kebabCase: (str: string) => string;
  */
 export declare function registerHelpers(): void;
 export declare function getOutputFileName(file: string, artifactName: string): string;
+export declare function extractTemplateVariables(source: string): string[];
+export declare function getAnswers(vars: string[]): Promise<Record<string, any>>;

@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import inquirer from 'inquirer';
 export var Transform;
 (function (Transform) {
     Transform["CAMEL_CASE"] = "camelCase";
@@ -41,8 +42,8 @@ export const camelCase = (str) => {
 // UserName -> user_name
 // userName -> user_name
 export const snakeCase = (str) => str
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-    .replace(/[-\s]+/g, "_")
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[-\s]+/g, '_')
     .toLowerCase();
 // UserName -> user-name
 // userName -> user-name
@@ -75,4 +76,34 @@ export function getOutputFileName(file, artifactName) {
         .replace(`name.${Transform.SNAKE_CASE}`, snakeCase(artifactName))
         .replace(`name.${Transform.KEBAB_CASE}`, kebabCase(artifactName))
         .replace('name', artifactName);
+}
+export function extractTemplateVariables(source) {
+    const ast = Handlebars.parse(source);
+    const vars = new Set();
+    const helpers = new Set(['if', 'each', 'unless', 'with', 'log']);
+    function walk(node) {
+        if (!node)
+            return;
+        if (node.type === 'MustacheStatement' || node.type === 'BlockStatement') {
+            const name = node.path?.original;
+            if (name && !helpers.has(name) && !name.startsWith('@')) {
+                vars.add(name.split('.')[0]);
+            }
+        }
+        for (const value of Object.values(node)) {
+            if (Array.isArray(value))
+                value.forEach(walk);
+            else if (typeof value === 'object')
+                walk(value);
+        }
+    }
+    walk(ast);
+    return [...vars];
+}
+export async function getAnswers(vars) {
+    return await inquirer.prompt(vars.map((name) => ({
+        type: 'input',
+        name,
+        message: `Enter ${name}:`,
+    })));
 }
