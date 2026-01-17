@@ -127,3 +127,19 @@ export async function getAnswers(vars: string[]): Promise<Record<string, any>> {
         })),
     );
 }
+
+export function getUndefinedTemplateVariables(templateContent: string, providedVars: Record<string, any>): string[] {
+    const templateVariables = extractTemplateVariables(templateContent);
+    return templateVariables
+        .filter((v) => !(v in providedVars))
+        .filter((v, i, arr) => arr.indexOf(v) === i) // unique
+        .filter((v) => !(v in [
+            Transform.CAMEL_CASE,
+            Transform.CAPITALIZE,
+            Transform.KEBAB_CASE,
+            Transform.LOWERCASE,
+            Transform.PASCAL_CASE,
+            Transform.SNAKE_CASE,
+            Transform.UPPERCASE,
+        ]));
+}

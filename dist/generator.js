@@ -4,7 +4,7 @@ import { glob } from 'glob';
 import Handlebars from 'handlebars';
 import ora from 'ora';
 import path from 'path';
-import { extractTemplateVariables, getAnswers, getOutputFileName, registerHelpers } from './helpers.js';
+import { getAnswers, getOutputFileName, getUndefinedTemplateVariables, registerHelpers } from './helpers.js';
 registerHelpers();
 export async function generate(templatesPath, artifactName, outputRoot) {
     if (!fs.existsSync(templatesPath))
@@ -17,12 +17,11 @@ export async function generate(templatesPath, artifactName, outputRoot) {
     for (const file of files) {
         const templateFile = path.join(templatesPath, file);
         const templateContent = await fs.readFile(templateFile, 'utf-8');
-        const templateVariables = extractTemplateVariables(templateContent);
-        const undefinedVars = templateVariables.filter((v) => !(v in globalVariables));
-        if (undefinedVars.length > 0) {
+        const undefinedVariables = getUndefinedTemplateVariables(templateContent, globalVariables);
+        if (undefinedVariables.length > 0) {
             spinner.stop();
-            console.log(chalk.yellow(`Template ${file} requires additional variables: ${undefinedVars.join(', ')}`));
-            const answers = await getAnswers(templateVariables.filter((v) => !(v in globalVariables)));
+            console.log(chalk.yellow(`Template ${file} requires additional variables: ${undefinedVariables.join(', ')}`));
+            const answers = await getAnswers(undefinedVariables);
             Object.assign(globalVariables, answers);
             spinner.start('Continuing generation...');
         }
