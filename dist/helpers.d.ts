@@ -23,3 +23,5 @@ export declare function getOutputFileName(file: string, artifactName: string): s
 export declare function extractTemplateVariables(source: string): string[];
 export declare function getAnswers(vars: string[]): Promise<Record<string, any>>;
 export declare function getUndefinedTemplateVariables(templateContent: string, providedVars: Record<string, any>): string[];
+export declare function resolveName(name: string): Promise<string>;
+export declare function resolveOutputFolder(name: string): Promise<string>;

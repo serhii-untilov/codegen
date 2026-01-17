@@ -10,11 +10,10 @@ export async function generate(templatesPath, artifactName, outputRoot) {
     if (!fs.existsSync(templatesPath))
         throw new Error(`Templates folder not found: ${templatesPath}`);
     const spinner = ora('Generating...').start();
-    // read all template files in templatesPath folder
-    const files = await glob('**/*.hbs', { cwd: templatesPath });
-    console.log(chalk.blue(`Found ${files.length} template(s) in ${templatesPath}`));
+    const templateFiles = await glob('**/*.hbs', { cwd: templatesPath });
+    console.log(chalk.blue(`Found ${templateFiles.length} template(s) in ${templatesPath}`));
     const globalVariables = { name: artifactName };
-    for (const file of files) {
+    for (const file of templateFiles) {
         const templateFile = path.join(templatesPath, file);
         const templateContent = await fs.readFile(templateFile, 'utf-8');
         const undefinedVariables = getUndefinedTemplateVariables(templateContent, globalVariables);

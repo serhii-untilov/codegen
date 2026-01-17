@@ -2,10 +2,10 @@
 import chalk from 'chalk';
 import { Command } from 'commander';
 import fs from 'fs-extra';
-import inquirer from 'inquirer';
 import ora from 'ora';
 import path from 'path';
 import { generate } from './generator.js';
+import { resolveName, resolveOutputFolder } from './helpers.js';
 const program = new Command();
 program.name('codegen').description('Multi-language code generation CLI').version('1.0.0');
 program
@@ -31,31 +31,3 @@ if (!fs.existsSync(templatesPath)) {
         process.exit(1);
     }
 })();
-async function resolveName(name) {
-    if (name !== '?') {
-        return name;
-    }
-    const { artifactName } = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'artifactName',
-            message: 'Enter name for generated artifact:',
-            validate: (input) => input.trim().length > 0 || 'Name cannot be empty',
-        },
-    ]);
-    return artifactName;
-}
-async function resolveOutputFolder(name) {
-    if (name !== '?') {
-        return name;
-    }
-    const { outputFolderName } = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'outputFolderName',
-            message: 'Enter name for the output folder name:',
-            validate: (input) => input.trim().length > 0 || 'Folder name cannot be empty',
-        },
-    ]);
-    return outputFolderName;
-}
