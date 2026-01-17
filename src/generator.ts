@@ -13,13 +13,12 @@ export async function generate(templatesPath: string, artifactName: string, outp
 
     const spinner = ora('Generating...').start();
 
-    // read all template files in templatesPath folder
-    const files = await glob('**/*.hbs', { cwd: templatesPath });
-    console.log(chalk.blue(`Found ${files.length} template(s) in ${templatesPath}`));
+    const templateFiles = await glob('**/*.hbs', { cwd: templatesPath });
+    console.log(chalk.blue(`Found ${templateFiles.length} template(s) in ${templatesPath}`));
 
     const globalVariables: Record<string, any> = { name: artifactName };
 
-    for (const file of files) {
+    for (const file of templateFiles) {
         const templateFile = path.join(templatesPath, file);
         const templateContent = await fs.readFile(templateFile, 'utf-8');
         const undefinedVariables = getUndefinedTemplateVariables(templateContent, globalVariables);
