@@ -2,10 +2,10 @@
 import chalk from 'chalk';
 import { Command } from 'commander';
 import fs from 'fs-extra';
-import inquirer from 'inquirer';
 import ora from 'ora';
 import path from 'path';
 import { generate } from './generator.js';
+import { resolveName, resolveOutputFolder } from './helpers.js';
 
 const program = new Command();
 
@@ -36,37 +36,3 @@ if (!fs.existsSync(templatesPath)) {
         process.exit(1);
     }
 })();
-
-async function resolveName(name: string): Promise<string> {
-    if (name !== '?') {
-        return name;
-    }
-
-    const { artifactName } = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'artifactName',
-            message: 'Enter name for generated artifact:',
-            validate: (input: string) => input.trim().length > 0 || 'Name cannot be empty',
-        },
-    ]);
-
-    return artifactName;
-}
-
-async function resolveOutputFolder(name: string): Promise<string> {
-    if (name !== '?') {
-        return name;
-    }
-
-    const { outputFolderName } = await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'outputFolderName',
-            message: 'Enter name for the output folder name:',
-            validate: (input: string) => input.trim().length > 0 || 'Folder name cannot be empty',
-        },
-    ]);
-
-    return outputFolderName;
-}
