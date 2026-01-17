@@ -1,0 +1,45 @@
+import { connectMongo, disconnectMongo } from '@app/common/mongo/mongo';
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AuthGuard } from 'guards/auth.guard';
+import { PermissionGuard } from 'guards/permission.guard';
+import { join } from 'path';
+import { LoggerService } from 'utils/logger/logger.service';
+import { {{pascalCase name}}Module } from './{{kebabCase name}}.module';
+// <codegen:import services>
+// </codegen:import services>
+
+const log = new LoggerService(__filename);
+
+async function bootstrap() {
+  await connectMongo();
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>({{pascalCase name}}Module, {
+    transport: Transport.GRPC,
+    options: {
+      url: '0.0.0.0:{{port}}',
+      maxSendMessageLength: -1,
+      maxReceiveMessageLength: -1,
+      protoPath: [join(__dirname, '../../../proto/{{kebabCase name}}/{{kebabCase name}}.proto')],
+      package: ['{{kebabCase name}}'],
+      loader: {
+        includeDirs: [join(__dirname, '..', 'proto')],
+      },
+    },
+  });
+
+  // Seeding DB
+  // <codegen:seeding>
+  // </codegen:seeding>
+
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new AuthGuard(reflector));
+  app.useGlobalGuards(new PermissionGuard(reflector));
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen();
+  log.info('{{kebabCase name}} run');
+}
+bootstrap();
+
+process.on('SIGINT', disconnectMongo);
+process.on('SIGTERM', disconnectMongo);

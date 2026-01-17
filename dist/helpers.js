@@ -1,15 +1,29 @@
 import Handlebars from 'handlebars';
 import inquirer from 'inquirer';
-export var Transform;
-(function (Transform) {
-    Transform["CAMEL_CASE"] = "camelCase";
-    Transform["CAPITALIZE"] = "capitalize";
-    Transform["KEBAB_CASE"] = "kebabCase";
-    Transform["LOWERCASE"] = "lowerCase";
-    Transform["PASCAL_CASE"] = "pascalCase";
-    Transform["SNAKE_CASE"] = "snakeCase";
-    Transform["UPPERCASE"] = "upperCase";
-})(Transform || (Transform = {}));
+export var CustomHelpers;
+(function (CustomHelpers) {
+    CustomHelpers["CAMEL_CASE"] = "camelCase";
+    CustomHelpers["CAPITALIZE"] = "capitalize";
+    CustomHelpers["KEBAB_CASE"] = "kebabCase";
+    CustomHelpers["LOWERCASE"] = "lowerCase";
+    CustomHelpers["PASCAL_CASE"] = "pascalCase";
+    CustomHelpers["SNAKE_CASE"] = "snakeCase";
+    CustomHelpers["UPPERCASE"] = "upperCase";
+})(CustomHelpers || (CustomHelpers = {}));
+const helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(CustomHelpers)]);
+/**
+ * Register common string helpers for code generation.
+ * These helpers are intentionally simple and predictable.
+ */
+export function registerHelpers() {
+    Handlebars.registerHelper(CustomHelpers.LOWERCASE, lowercase);
+    Handlebars.registerHelper(CustomHelpers.UPPERCASE, uppercase);
+    Handlebars.registerHelper(CustomHelpers.CAPITALIZE, capitalize);
+    Handlebars.registerHelper(CustomHelpers.CAMEL_CASE, camelCase);
+    Handlebars.registerHelper(CustomHelpers.PASCAL_CASE, pascalCase);
+    Handlebars.registerHelper(CustomHelpers.SNAKE_CASE, snakeCase);
+    Handlebars.registerHelper(CustomHelpers.KEBAB_CASE, kebabCase);
+}
 // user -> user
 export const lowercase = (str) => (typeof str === 'string' ? str.toLowerCase() : str);
 // user -> USER
@@ -51,36 +65,22 @@ export const kebabCase = (str) => str
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .replace(/[_\s]+/g, '-')
     .toLowerCase();
-/**
- * Register common string helpers for code generation.
- * These helpers are intentionally simple and predictable.
- */
-export function registerHelpers() {
-    Handlebars.registerHelper(Transform.LOWERCASE, lowercase);
-    Handlebars.registerHelper(Transform.UPPERCASE, uppercase);
-    Handlebars.registerHelper(Transform.CAPITALIZE, capitalize);
-    Handlebars.registerHelper(Transform.CAMEL_CASE, camelCase);
-    Handlebars.registerHelper(Transform.PASCAL_CASE, pascalCase);
-    Handlebars.registerHelper(Transform.SNAKE_CASE, snakeCase);
-    Handlebars.registerHelper(Transform.KEBAB_CASE, kebabCase);
-}
 export function getOutputFileName(file, artifactName) {
     // TODO: consider using a more robust templating solution
     return file
         .replace('.hbs', '')
-        .replace(`name.${Transform.LOWERCASE}`, lowercase(artifactName))
-        .replace(`name.${Transform.UPPERCASE}`, uppercase(artifactName))
-        .replace(`name.${Transform.CAPITALIZE}`, capitalize(artifactName))
-        .replace(`name.${Transform.CAMEL_CASE}`, camelCase(artifactName))
-        .replace(`name.${Transform.PASCAL_CASE}`, pascalCase(artifactName))
-        .replace(`name.${Transform.SNAKE_CASE}`, snakeCase(artifactName))
-        .replace(`name.${Transform.KEBAB_CASE}`, kebabCase(artifactName))
+        .replace(`name.${CustomHelpers.LOWERCASE}`, lowercase(artifactName))
+        .replace(`name.${CustomHelpers.UPPERCASE}`, uppercase(artifactName))
+        .replace(`name.${CustomHelpers.CAPITALIZE}`, capitalize(artifactName))
+        .replace(`name.${CustomHelpers.CAMEL_CASE}`, camelCase(artifactName))
+        .replace(`name.${CustomHelpers.PASCAL_CASE}`, pascalCase(artifactName))
+        .replace(`name.${CustomHelpers.SNAKE_CASE}`, snakeCase(artifactName))
+        .replace(`name.${CustomHelpers.KEBAB_CASE}`, kebabCase(artifactName))
         .replace('name', artifactName);
 }
 export function extractTemplateVariables(source) {
     const ast = Handlebars.parse(source);
     const vars = new Set();
-    const helpers = new Set(['if', 'each', 'unless', 'with', 'log']);
     function walk(node) {
         if (!node)
             return;
@@ -109,11 +109,7 @@ export async function getAnswers(vars) {
 }
 export function getUndefinedTemplateVariables(templateContent, providedVars) {
     const templateVariables = extractTemplateVariables(templateContent);
-    const transformSet = new Set(Object.values(Transform));
-    return templateVariables
-        .filter((v) => !(v in providedVars))
-        .filter((v, i, arr) => arr.indexOf(v) === i)
-        .filter((v) => !transformSet.has(v));
+    return templateVariables.filter((v) => !(v in providedVars)).filter((v, i, arr) => arr.indexOf(v) === i);
 }
 export async function resolveName(name) {
     if (name !== '?') {

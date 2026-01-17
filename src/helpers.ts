@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import inquirer from 'inquirer';
 
-export enum Transform {
+export enum CustomHelpers {
     CAMEL_CASE = 'camelCase',
     CAPITALIZE = 'capitalize',
     KEBAB_CASE = 'kebabCase',
@@ -9,6 +9,22 @@ export enum Transform {
     PASCAL_CASE = 'pascalCase',
     SNAKE_CASE = 'snakeCase',
     UPPERCASE = 'upperCase',
+}
+
+const helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(CustomHelpers)]);
+
+/**
+ * Register common string helpers for code generation.
+ * These helpers are intentionally simple and predictable.
+ */
+export function registerHelpers() {
+    Handlebars.registerHelper(CustomHelpers.LOWERCASE, lowercase);
+    Handlebars.registerHelper(CustomHelpers.UPPERCASE, uppercase);
+    Handlebars.registerHelper(CustomHelpers.CAPITALIZE, capitalize);
+    Handlebars.registerHelper(CustomHelpers.CAMEL_CASE, camelCase);
+    Handlebars.registerHelper(CustomHelpers.PASCAL_CASE, pascalCase);
+    Handlebars.registerHelper(CustomHelpers.SNAKE_CASE, snakeCase);
+    Handlebars.registerHelper(CustomHelpers.KEBAB_CASE, kebabCase);
 }
 
 // user -> user
@@ -64,39 +80,23 @@ export const kebabCase = (str: string) =>
         .replace(/[_\s]+/g, '-')
         .toLowerCase();
 
-/**
- * Register common string helpers for code generation.
- * These helpers are intentionally simple and predictable.
- */
-export function registerHelpers() {
-    Handlebars.registerHelper(Transform.LOWERCASE, lowercase);
-    Handlebars.registerHelper(Transform.UPPERCASE, uppercase);
-    Handlebars.registerHelper(Transform.CAPITALIZE, capitalize);
-    Handlebars.registerHelper(Transform.CAMEL_CASE, camelCase);
-    Handlebars.registerHelper(Transform.PASCAL_CASE, pascalCase);
-    Handlebars.registerHelper(Transform.SNAKE_CASE, snakeCase);
-    Handlebars.registerHelper(Transform.KEBAB_CASE, kebabCase);
-}
-
 export function getOutputFileName(file: string, artifactName: string): string {
     // TODO: consider using a more robust templating solution
     return file
         .replace('.hbs', '')
-        .replace(`name.${Transform.LOWERCASE}`, lowercase(artifactName))
-        .replace(`name.${Transform.UPPERCASE}`, uppercase(artifactName))
-        .replace(`name.${Transform.CAPITALIZE}`, capitalize(artifactName))
-        .replace(`name.${Transform.CAMEL_CASE}`, camelCase(artifactName))
-        .replace(`name.${Transform.PASCAL_CASE}`, pascalCase(artifactName))
-        .replace(`name.${Transform.SNAKE_CASE}`, snakeCase(artifactName))
-        .replace(`name.${Transform.KEBAB_CASE}`, kebabCase(artifactName))
+        .replace(`name.${CustomHelpers.LOWERCASE}`, lowercase(artifactName))
+        .replace(`name.${CustomHelpers.UPPERCASE}`, uppercase(artifactName))
+        .replace(`name.${CustomHelpers.CAPITALIZE}`, capitalize(artifactName))
+        .replace(`name.${CustomHelpers.CAMEL_CASE}`, camelCase(artifactName))
+        .replace(`name.${CustomHelpers.PASCAL_CASE}`, pascalCase(artifactName))
+        .replace(`name.${CustomHelpers.SNAKE_CASE}`, snakeCase(artifactName))
+        .replace(`name.${CustomHelpers.KEBAB_CASE}`, kebabCase(artifactName))
         .replace('name', artifactName);
 }
 
 export function extractTemplateVariables(source: string): string[] {
     const ast = Handlebars.parse(source);
     const vars = new Set<string>();
-
-    const helpers = new Set(['if', 'each', 'unless', 'with', 'log']);
 
     function walk(node: any) {
         if (!node) return;
@@ -130,13 +130,7 @@ export async function getAnswers(vars: string[]): Promise<Record<string, any>> {
 
 export function getUndefinedTemplateVariables(templateContent: string, providedVars: Record<string, any>): string[] {
     const templateVariables = extractTemplateVariables(templateContent);
-
-    const transformSet = new Set<string>(Object.values(Transform));
-
-    return templateVariables
-        .filter((v) => !(v in providedVars))
-        .filter((v, i, arr) => arr.indexOf(v) === i)
-        .filter((v) => !transformSet.has(v));
+    return templateVariables.filter((v) => !(v in providedVars)).filter((v, i, arr) => arr.indexOf(v) === i);
 }
 
 export async function resolveName(name: string): Promise<string> {
