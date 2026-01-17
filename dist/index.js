@@ -23,9 +23,7 @@ if (!fs.existsSync(templatesPath)) {
     try {
         const name = await resolveName(options.name);
         const output = await resolveOutputFolder(options.output);
-        const spinner = ora("Generating...").start();
         await generate(templatesPath, name, output);
-        spinner.succeed("Generation completed!");
     }
     catch (err) {
         ora().fail("Generation failed.");
