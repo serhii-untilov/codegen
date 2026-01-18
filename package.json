@@ -15,10 +15,10 @@
   },
   "type": "module",
   "bin": {
-    "codegen": "dist/index.js"
+    "codegen": "dist/app.js"
   },
   "scripts": {
-    "build": "tsc && cp package.json dist/ && chmod +x dist/index.js",
+    "build": "tsc && cp package.json dist/ && chmod +x dist/app.js",
     "prepack": "cp package.json dist/",
     "dev": "tsc --watch",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
