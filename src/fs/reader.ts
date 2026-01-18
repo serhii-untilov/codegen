@@ -2,7 +2,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-export function getTemplateFolder(templateFolder: string): string {
+export function getTemplatePath(templateFolder: string): string {
     const resolvedPath = path.resolve(templateFolder);
     if (!fs.existsSync(resolvedPath) || !fs.lstatSync(resolvedPath).isDirectory()) {
         throw new Error(`Template folder not found: ${resolvedPath}`);
@@ -21,4 +21,9 @@ export function getTemplateFile(templateFolder: string, relativeTemplatePath: st
 export async function getTemplateContent(templateFile: string) {
     const templateContent = await fs.readFile(templateFile, 'utf-8');
     return templateContent;
+}
+
+
+export function getTemplateName(templatePath: string, templateFile: string): string {
+    return path.join(templatePath, templateFile);
 }

@@ -3,14 +3,12 @@ import chalk from 'chalk';
 import { options } from './cli/command.js';
 import { resolveName, resolveOutputFolder } from './cli/prompts.js';
 import { generate } from './engine/generator.js';
-import { getTemplateFolder } from './fs/reader.js';
 import { failSpinner } from './helpers/spinner.js';
 (async () => {
     try {
-        const templatePath = getTemplateFolder(options.templates);
         const artifactName = await resolveName(options.name);
         const outputRoot = await resolveOutputFolder(options.output);
-        await generate(templatePath, artifactName, outputRoot);
+        await generate(options.templates, artifactName, outputRoot);
     }
     catch (err) {
         failSpinner('Generation failed.');

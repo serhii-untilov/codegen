@@ -3,6 +3,6 @@ import type { CodegenMeta } from '../types/meta.js';
 import { nowDateTime } from './date.js';
 import { pascalCase } from './transforms.js';
 
-export function getCodegenMeta(): CodegenMeta {
-    return { codegen: { ...pkg, ...nowDateTime(), name: pascalCase(pkg.name) } };
+export function getCodegenMeta(extraMetaData: any = {}): CodegenMeta {
+    return { codegen: { ...pkg, ...nowDateTime(), name: pascalCase(pkg.name), ...extraMetaData } };
 }

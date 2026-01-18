@@ -3,7 +3,12 @@ import { getAnswers } from '../cli/prompts.js';
 import { startSpinner, stopSpinner } from '../helpers/spinner.js';
 import { extractTemplateVars } from './template.js';
 
-export const vars: Record<string, any> = {};
+const vars: Record<string, any> = {};
+
+export function initVars(newVars: Record<string, any>) {
+    clearVars()
+    Object.assign(vars, newVars);
+}
 
 export function setVar(key: string, value: any) {
     vars[key] = value;

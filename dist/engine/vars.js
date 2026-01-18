@@ -2,7 +2,11 @@ import chalk from 'chalk';
 import { getAnswers } from '../cli/prompts.js';
 import { startSpinner, stopSpinner } from '../helpers/spinner.js';
 import { extractTemplateVars } from './template.js';
-export const vars = {};
+const vars = {};
+export function initVars(newVars) {
+    clearVars();
+    Object.assign(vars, newVars);
+}
 export function setVar(key, value) {
     vars[key] = value;
 }

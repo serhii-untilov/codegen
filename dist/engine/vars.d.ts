@@ -1,4 +1,4 @@
-export declare const vars: Record<string, any>;
+export declare function initVars(newVars: Record<string, any>): void;
 export declare function setVar(key: string, value: any): void;
 export declare function getVar(key: string): any;
 export declare function getAllVars(): Record<string, any>;
