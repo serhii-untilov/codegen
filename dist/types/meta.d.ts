@@ -6,5 +6,6 @@ export type CodegenMeta = {
         author: string;
         date: string;
         time: string;
+        template: string;
     };
 };
