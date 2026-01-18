@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import * as transform from '../helpers/transforms.js';
+import * as transform from '../helpers/transform.js';
 import { Transform } from '../types/transform.js';
 export async function writeFile(filePath, content) {
     fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
