@@ -31,10 +31,10 @@ class {{pascalCase name}}:
 To generate code run:
 
 ``` sh
-npx codegen --templates ./templates/python.class --name example
+npx codegen --templates ./templates/python.class --name example --output src
 ```
 
-The generator will prompts you about artifact name, and generates a file `src\{artifact_name}.py`
+The Codegen will generate the file `src\example.py`
 
 ## Getting help
 
