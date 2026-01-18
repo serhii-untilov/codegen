@@ -2,13 +2,15 @@
 import chalk from 'chalk';
 import { options } from './cli/command.js';
 import { resolveName, resolveOutputFolder } from './cli/prompts.js';
-import { generate } from './engine/generator.js';
+import { Generator } from './engine/generator.js';
 import { failSpinner } from './helpers/spinner.js';
+import { registerTransformHelpers } from './helpers/transform.js';
 (async () => {
     try {
         const artifactName = await resolveName(options.name);
         const outputRoot = await resolveOutputFolder(options.output);
-        await generate(options.templates, artifactName, outputRoot);
+        registerTransformHelpers();
+        await new Generator(options.templates, artifactName, outputRoot).run();
     }
     catch (err) {
         failSpinner('Generation failed.');

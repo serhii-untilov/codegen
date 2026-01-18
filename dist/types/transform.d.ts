@@ -7,3 +7,4 @@ export declare enum Transform {
     SNAKE_CASE = "snakeCase",
     UPPERCASE = "upperCase"
 }
+export declare const Helpers: Set<string>;

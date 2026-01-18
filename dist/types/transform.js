@@ -8,3 +8,4 @@ export var Transform;
     Transform["SNAKE_CASE"] = "snakeCase";
     Transform["UPPERCASE"] = "upperCase";
 })(Transform || (Transform = {}));
+export const Helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(Transform)]);

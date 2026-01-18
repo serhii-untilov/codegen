@@ -7,3 +7,5 @@ export enum Transform {
     SNAKE_CASE = 'snakeCase',
     UPPERCASE = 'upperCase',
 }
+
+export const Helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(Transform)]);

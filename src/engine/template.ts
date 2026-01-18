@@ -1,7 +1,5 @@
 import Handlebars from 'handlebars';
-import { Transform } from '../types/transform.js';
-
-const helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(Transform)]);
+import { Helpers } from '../types/transform.js';
 
 export function extractTemplateVars(source: string): string[] {
     const ast = Handlebars.parse(source);
@@ -12,7 +10,7 @@ export function extractTemplateVars(source: string): string[] {
 
         if (node.type === 'MustacheStatement' || node.type === 'BlockStatement') {
             const name = node.path?.original;
-            if (name && !helpers.has(name) && !name.startsWith('@') && !name.startsWith('codegen.')) {
+            if (name && !Helpers.has(name) && !name.startsWith('@') && !name.startsWith('codegen.')) {
                 vars.add(name.split('.')[0]);
             }
         }
