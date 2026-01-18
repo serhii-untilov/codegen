@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import * as transform from '../helpers/transforms.js';
+import * as transform from '../helpers/transform.js';
 import { Transform } from '../types/transform.js';
 
 export async function writeFile(filePath: string, content: string): Promise<void> {
