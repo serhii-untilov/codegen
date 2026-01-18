@@ -14,8 +14,7 @@ export async function generate(templatesFolder, artifactName, outputRoot) {
     const templateFiles = await glob('**/*.hbs', { cwd: templatesPath });
     console.log(chalk.blue(`Found ${templateFiles.length} template(s) in ${templatesPath}`));
     for (const file of templateFiles) {
-        const templateFile = getTemplateFile(templatesPath, file);
-        const templateContent = await getTemplateContent(templateFile);
+        const templateContent = await getTemplateContent(getTemplateFile(templatesPath, file));
         const meta = getCodegenMeta({ template: getTemplateName(templatesFolder, file) });
         const vars = new Vars({ ...meta, name: artifactName });
         await vars.resolveUndefinedVars(templateContent, file);
