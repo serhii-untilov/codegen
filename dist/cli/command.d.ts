@@ -1,1 +1,5 @@
-export declare const options: import("commander").OptionValues;
+/**
+ * Commander setup
+ */
+import { Options } from './options.js';
+export declare const options: Options;

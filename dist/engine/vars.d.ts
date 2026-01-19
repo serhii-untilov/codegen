@@ -1,5 +1,5 @@
 export declare class Vars {
-    vars: Record<string, any>;
+    private readonly vars;
     constructor(vars?: Record<string, any>);
     setVar(key: string, value: any): void;
     getVar(key: string): any;

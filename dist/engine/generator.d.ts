@@ -1,7 +1,9 @@
+/**
+ * Main generation pipeline
+ */
+import { Options } from '../cli/options.js';
 export declare class Generator {
-    private readonly templatesFolder;
-    private readonly artifactName;
-    private readonly outputRoot;
-    constructor(templatesFolder: string, artifactName: string, outputRoot: string);
+    private readonly options;
+    constructor(options: Options);
     run(): Promise<void>;
 }

@@ -1,8 +1,11 @@
+/**
+ * Write / patch files
+ */
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import * as transform from '../helpers/transform.js';
-import { Transform } from '../types/transform.js';
+import * as transform from '../helpers/transforms.js';
+import { Transforms } from '../constants/transforms.js';
 export async function writeFile(filePath, content) {
     fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
     console.log(chalk.green(`Generated: ${filePath}`));
@@ -23,12 +26,12 @@ export function makeOutputFileName(file, artifactName) {
     // TODO: consider using a more robust templating solution
     return file
         .replace('.hbs', '')
-        .replace(`name.${Transform.LOWERCASE}`, transform.lowercase(artifactName))
-        .replace(`name.${Transform.UPPERCASE}`, transform.uppercase(artifactName))
-        .replace(`name.${Transform.CAPITALIZE}`, transform.capitalize(artifactName))
-        .replace(`name.${Transform.CAMEL_CASE}`, transform.camelCase(artifactName))
-        .replace(`name.${Transform.PASCAL_CASE}`, transform.pascalCase(artifactName))
-        .replace(`name.${Transform.SNAKE_CASE}`, transform.snakeCase(artifactName))
-        .replace(`name.${Transform.KEBAB_CASE}`, transform.kebabCase(artifactName))
+        .replace(`name.${Transforms.LOWERCASE}`, transform.lowercase(artifactName))
+        .replace(`name.${Transforms.UPPERCASE}`, transform.uppercase(artifactName))
+        .replace(`name.${Transforms.CAPITALIZE}`, transform.capitalize(artifactName))
+        .replace(`name.${Transforms.CAMEL_CASE}`, transform.camelCase(artifactName))
+        .replace(`name.${Transforms.PASCAL_CASE}`, transform.pascalCase(artifactName))
+        .replace(`name.${Transforms.SNAKE_CASE}`, transform.snakeCase(artifactName))
+        .replace(`name.${Transforms.KEBAB_CASE}`, transform.kebabCase(artifactName))
         .replace('name', artifactName);
 }

@@ -1,17 +1,20 @@
+/**
+ * camelCase, pascalCase, etc.
+ */
 import Handlebars from 'handlebars';
-import { Transform } from '../types/transform.js';
+import { Transforms } from '../constants/transforms.js';
 /**
  * Register common string helpers for code generation.
  * These helpers are intentionally simple and predictable.
  */
 export function registerTransformHelpers() {
-    Handlebars.registerHelper(Transform.LOWERCASE, lowercase);
-    Handlebars.registerHelper(Transform.UPPERCASE, uppercase);
-    Handlebars.registerHelper(Transform.CAPITALIZE, capitalize);
-    Handlebars.registerHelper(Transform.CAMEL_CASE, camelCase);
-    Handlebars.registerHelper(Transform.PASCAL_CASE, pascalCase);
-    Handlebars.registerHelper(Transform.SNAKE_CASE, snakeCase);
-    Handlebars.registerHelper(Transform.KEBAB_CASE, kebabCase);
+    Handlebars.registerHelper(Transforms.LOWERCASE, lowercase);
+    Handlebars.registerHelper(Transforms.UPPERCASE, uppercase);
+    Handlebars.registerHelper(Transforms.CAPITALIZE, capitalize);
+    Handlebars.registerHelper(Transforms.CAMEL_CASE, camelCase);
+    Handlebars.registerHelper(Transforms.PASCAL_CASE, pascalCase);
+    Handlebars.registerHelper(Transforms.SNAKE_CASE, snakeCase);
+    Handlebars.registerHelper(Transforms.KEBAB_CASE, kebabCase);
 }
 // user -> user
 export const lowercase = (str) => (typeof str === 'string' ? str.toLowerCase() : str);

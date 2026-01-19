@@ -1,4 +1,6 @@
-// Read templates/files from filesystem
+/**
+ * Read templates/files
+ */
 import fs from 'fs-extra';
 import path from 'path';
 export function getTemplatePath(templateFolder) {
@@ -18,7 +20,4 @@ export function getTemplateFile(templateFolder, relativeTemplatePath) {
 export async function getTemplateContent(templateFile) {
     const templateContent = await fs.readFile(templateFile, 'utf-8');
     return templateContent;
-}
-export function getTemplateName(templatePath, templateFile) {
-    return path.join(templatePath, templateFile);
 }

@@ -1,3 +1,6 @@
+/**
+ * date/time helpers
+ */
 export function nowDateTime() {
     const d = new Date();
     const pad = (n) => n.toString().padStart(2, '0');

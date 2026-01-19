@@ -1,3 +1,7 @@
+/**
+ * Codegen application meta data
+ */
+
 export type CodegenMeta = {
     codegen: {
         name: string;

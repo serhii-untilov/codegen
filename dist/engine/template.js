@@ -1,5 +1,8 @@
+/**
+ * Handlebars rendering
+ */
 import Handlebars from 'handlebars';
-import { Helpers } from '../types/transform.js';
+import { Helpers } from '../constants/transforms.js';
 export function extractTemplateVars(source) {
     const ast = Handlebars.parse(source);
     const vars = new Set();

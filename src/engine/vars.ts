@@ -4,11 +4,7 @@ import { startSpinner, stopSpinner } from '../helpers/spinner.js';
 import { extractTemplateVars } from './template.js';
 
 export class Vars {
-    vars: Record<string, any>
-
-    constructor(vars: Record<string, any> = {}) {
-        this.vars = vars
-    }
+    constructor(private readonly vars: Record<string, any> = {}) {}
 
     setVar(key: string, value: any) {
         this.vars[key] = value;

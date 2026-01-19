@@ -1,4 +1,9 @@
+/**
+ * Commander setup
+ */
+
 import { Command } from 'commander';
+import { Options } from './options.js';
 
 const program = new Command();
 
@@ -10,4 +15,5 @@ program
     .option('-o, --output <folder|?>', 'Output folder', 'src');
 
 program.parse(process.argv);
-export const options = program.opts();
+
+export const options = new Options(program.opts());

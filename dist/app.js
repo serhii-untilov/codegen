@@ -1,16 +1,17 @@
 #!/usr/bin/env node
+/**
+ * CLI entry point (bin target)
+ */
 import chalk from 'chalk';
 import { options } from './cli/command.js';
-import { resolveName, resolveOutputFolder } from './cli/prompts.js';
 import { Generator } from './engine/generator.js';
 import { failSpinner } from './helpers/spinner.js';
-import { registerTransformHelpers } from './helpers/transform.js';
+import { registerTransformHelpers } from './helpers/transforms.js';
 (async () => {
     try {
-        const artifactName = await resolveName(options.name);
-        const outputRoot = await resolveOutputFolder(options.output);
         registerTransformHelpers();
-        await new Generator(options.templates, artifactName, outputRoot).run();
+        await options.resolve();
+        await new Generator(options).run();
     }
     catch (err) {
         failSpinner('Generation failed.');

@@ -1,4 +1,8 @@
-export enum Transform {
+/**
+ * Transform helpers enum
+ */
+
+export enum Transforms {
     CAMEL_CASE = 'camelCase',
     CAPITALIZE = 'capitalize',
     KEBAB_CASE = 'kebabCase',
@@ -8,4 +12,8 @@ export enum Transform {
     UPPERCASE = 'upperCase',
 }
 
-export const Helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(Transform)]);
+/**
+ * Handlebars helpers set
+ */
+
+export const Helpers = new Set(['if', 'each', 'unless', 'with', 'log', ...Object.values(Transforms)]);

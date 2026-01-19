@@ -1,3 +1,6 @@
+/**
+ * ora spinner pause/resume helpers
+ */
 import ora from 'ora';
 const spinner = ora();
 export function startSpinner(message) {
