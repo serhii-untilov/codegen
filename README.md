@@ -1,6 +1,6 @@
 # Codegen
 
-Multi-language code generation CLI (TypeScript, Python, ...) by templates.
+CLI for code generation using [Handlebars](https://handlebarsjs.com/guide/) templates.
 
 ## Install
 
