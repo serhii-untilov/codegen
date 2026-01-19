@@ -4,8 +4,6 @@ CLI for code generation using [Handlebars](https://handlebarsjs.com/guide/) temp
 
 ## Install
 
-Works in any Node project after installing via:
-
 ``` sh
 npm install -D github:serhii-untilov/codegen
 ```
