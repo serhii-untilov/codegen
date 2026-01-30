@@ -5,13 +5,13 @@
  */
 
 import chalk from 'chalk';
+import { glob } from 'glob';
 import { options } from './cli/command.js';
 import { Generator } from './engine/generator.js';
+import { getTemplatePath } from './fs/reader.js';
+import { Writer } from './fs/writer.js';
 import { failSpinner, startSpinner, succeedSpinner } from './helpers/spinner.js';
 import { registerTransformHelpers } from './helpers/transforms.js';
-import { getTemplatePath } from './fs/reader.js';
-import { glob } from 'glob';
-import { fileExists, writeFile, Writer } from './fs/writer.js';
 
 (async () => {
     try {
