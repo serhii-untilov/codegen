@@ -2,8 +2,37 @@
  * Handlebars rendering
  */
 
+import fs from 'fs-extra';
+import matter from 'gray-matter';
 import Handlebars from 'handlebars';
 import { Helpers } from '../constants/transforms.js';
+
+export type TemplateMeta = {
+    name?: string;
+    description?: string;
+    target?: string;
+    inject?: {
+        mode: 'create' | 'append' | 'replace';
+        overwrite?: boolean;
+        regex?: string;
+    };
+    vars?: string[];
+};
+
+export type ParsedTemplate = {
+    meta: TemplateMeta;
+    content: string;
+};
+
+export async function readTemplate(filePath: string): Promise<ParsedTemplate> {
+    const raw = await fs.readFile(filePath, 'utf8');
+    const parsed = matter(raw);
+
+    return {
+        meta: parsed.data as TemplateMeta,
+        content: parsed.content.trim(),
+    };
+}
 
 export function extractTemplateVars(source: string): string[] {
     const ast = Handlebars.parse(source);

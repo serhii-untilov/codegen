@@ -1,38 +1,32 @@
 import chalk from 'chalk';
 import { getAnswers } from '../cli/prompts.js';
 import { startSpinner, stopSpinner } from '../helpers/spinner.js';
-import { extractTemplateVars } from './template.js';
-
-export class Vars {
-    constructor(private readonly vars: Record<string, any> = {}) {}
-
-    setVar(key: string, value: any) {
+import { extractTemplateVars } from './template-reader.js';
+export class Context {
+    constructor(vars = {}) {
+        this.vars = vars;
+    }
+    setVar(key, value) {
         this.vars[key] = value;
     }
-
-    getVar(key: string): any {
+    getVar(key) {
         return this.vars[key];
     }
-
-    getAllVars(): Record<string, any> {
+    getAllVars() {
         return { ...this.vars };
     }
-
     clearVars() {
         for (const key in this.vars) {
             delete this.vars[key];
         }
     }
-
-    getUndefinedVars(templateVars: string[]): string[] {
+    getUndefinedVars(templateVars) {
         return templateVars.filter((v) => !(v in this.vars)).filter((v, i, arr) => arr.indexOf(v) === i);
     }
-
-    addVars(newVars: Record<string, any>) {
+    addVars(newVars) {
         Object.assign(this.vars, newVars);
     }
-
-    async resolveUndefinedVars(templateContent: string, file: string) {
+    async resolveUndefinedVars(templateContent, file) {
         const undefinedVars = this.getUndefinedVars(extractTemplateVars(templateContent));
         if (undefinedVars.length > 0) {
             stopSpinner();

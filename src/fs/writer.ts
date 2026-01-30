@@ -8,9 +8,18 @@ import path from 'path';
 import * as transforms from '../helpers/transforms.js';
 import { Transforms } from '../constants/transforms.js';
 
-export async function writeFile(filePath: string, content: string): Promise<void> {
-    fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
-    console.log(chalk.green(`Generated: ${filePath}`));
+// export async function writeFile(filePath: string, content: string): Promise<void> {
+//     fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
+//     console.log(chalk.green(`Generated: ${filePath}`));
+// }
+
+export async function writeFile(folderPath: string, fileName: string, content: string): Promise<void> {
+    const fullPath = path.join(folderPath, fileName);
+
+    await fs.promises.mkdir(folderPath, { recursive: true });
+    await fs.promises.writeFile(fullPath, content);
+
+    console.log(chalk.green(`Generated: ${fullPath}`));
 }
 
 export async function makeOutputFolder(

@@ -4,11 +4,17 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import * as transform from '../helpers/transforms.js';
+import * as transforms from '../helpers/transforms.js';
 import { Transforms } from '../constants/transforms.js';
-export async function writeFile(filePath, content) {
-    fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
-    console.log(chalk.green(`Generated: ${filePath}`));
+// export async function writeFile(filePath: string, content: string): Promise<void> {
+//     fs.promises.mkdir(path.dirname(filePath), { recursive: true }).then(() => fs.promises.writeFile(filePath, content));
+//     console.log(chalk.green(`Generated: ${filePath}`));
+// }
+export async function writeFile(folderPath, fileName, content) {
+    const fullPath = path.join(folderPath, fileName);
+    await fs.promises.mkdir(folderPath, { recursive: true });
+    await fs.promises.writeFile(fullPath, content);
+    console.log(chalk.green(`Generated: ${fullPath}`));
 }
 export async function makeOutputFolder(outputRoot, templatePath, file, artifactName) {
     const templateFile = path.join(templatePath, file);
@@ -26,12 +32,12 @@ export function makeOutputFileName(file, artifactName) {
     // TODO: consider using a more robust templating solution
     return file
         .replace('.hbs', '')
-        .replace(`name.${Transforms.LOWERCASE}`, transform.lowercase(artifactName))
-        .replace(`name.${Transforms.UPPERCASE}`, transform.uppercase(artifactName))
-        .replace(`name.${Transforms.CAPITALIZE}`, transform.capitalize(artifactName))
-        .replace(`name.${Transforms.CAMEL_CASE}`, transform.camelCase(artifactName))
-        .replace(`name.${Transforms.PASCAL_CASE}`, transform.pascalCase(artifactName))
-        .replace(`name.${Transforms.SNAKE_CASE}`, transform.snakeCase(artifactName))
-        .replace(`name.${Transforms.KEBAB_CASE}`, transform.kebabCase(artifactName))
+        .replace(`name.${Transforms.LOWERCASE}`, transforms.lowercase(artifactName))
+        .replace(`name.${Transforms.UPPERCASE}`, transforms.uppercase(artifactName))
+        .replace(`name.${Transforms.CAPITALIZE}`, transforms.capitalize(artifactName))
+        .replace(`name.${Transforms.CAMEL_CASE}`, transforms.camelCase(artifactName))
+        .replace(`name.${Transforms.PASCAL_CASE}`, transforms.pascalCase(artifactName))
+        .replace(`name.${Transforms.SNAKE_CASE}`, transforms.snakeCase(artifactName))
+        .replace(`name.${Transforms.KEBAB_CASE}`, transforms.kebabCase(artifactName))
         .replace('name', artifactName);
 }

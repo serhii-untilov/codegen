@@ -1,4 +1,4 @@
-export declare class Vars {
+export declare class Context {
     private readonly vars;
     constructor(vars?: Record<string, any>);
     setVar(key: string, value: any): void;

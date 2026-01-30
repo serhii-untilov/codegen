@@ -38,9 +38,11 @@
     "commander": "^14.0.2",
     "fs-extra": "^11.3.3",
     "glob": "^13.0.0",
+    "gray-matter": "^4.0.3",
     "handlebars": "^4.7.8",
     "inquirer": "^13.2.0",
-    "ora": "^9.0.0"
+    "ora": "^9.0.0",
+    "yaml": "^2.8.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
