@@ -5,18 +5,16 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
 export class Writer {
-    constructor(folderPath, fileName, meta) {
+    constructor(folderPath) {
         this.folderPath = folderPath;
-        this.fileName = fileName;
-        this.meta = meta;
     }
-    async write(content) {
-        const isExists = await fileExists(this.folderPath, this.fileName);
-        if (isExists && !this.meta.inject?.overwrite) {
-            console.log(chalk.yellow(`Skipping existing file: ${this.fileName}`));
+    async write(fileName, meta, content) {
+        const isExists = await fileExists(this.folderPath, fileName);
+        if (isExists && !meta.inject?.overwrite) {
+            console.log(chalk.yellow(`Skipping existing file: ${fileName}`));
         }
-        else if (!isExists && this.meta.inject?.mode === 'create') {
-            const fullPath = await writeFile(this.folderPath, this.fileName, content);
+        else if (!isExists && meta.inject?.mode === 'create') {
+            const fullPath = await writeFile(this.folderPath, fileName, content);
             console.log(chalk.green(`Generated: ${fullPath}`));
         }
     }

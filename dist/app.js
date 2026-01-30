@@ -20,7 +20,7 @@ import { Writer } from './fs/writer.js';
         console.log(chalk.blue(`Found ${templateFiles.length} template(s) in ${templatePath}`));
         for (const file of templateFiles) {
             const { fileName, meta, content } = await new Generator(options, templatePath, file).run();
-            new Writer(options.output, fileName, meta).write(content);
+            new Writer(options.output).write(fileName, meta, content);
         }
         succeedSpinner('Done');
     }
