@@ -11,18 +11,23 @@ import { failSpinner, startSpinner, succeedSpinner } from './helpers/spinner.js'
 import { registerTransformHelpers } from './helpers/transforms.js';
 import { getTemplatePath } from './fs/reader.js';
 import { glob } from 'glob';
+import { fileExists, writeFile, Writer } from './fs/writer.js';
 
 (async () => {
     try {
         registerTransformHelpers();
         await options.resolve();
+
         startSpinner('Generating...');
         const templatePath = getTemplatePath(options.templates);
         const templateFiles = await glob('**/*.hbs', { cwd: templatePath });
         console.log(chalk.blue(`Found ${templateFiles.length} template(s) in ${templatePath}`));
+
         for (const file of templateFiles) {
-            await new Generator(options, templatePath, file).run();
+            const { fileName, meta, content } = await new Generator(options, templatePath, file).run();
+            new Writer(options.output, fileName, meta).write(content);
         }
+
         succeedSpinner('Done');
     } catch (err: any) {
         failSpinner('Generation failed.');

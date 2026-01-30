@@ -4,7 +4,6 @@
 import Handlebars from 'handlebars';
 import { getApplicationPath, getFilePath, getRelativePath } from '../fs/path.js';
 import { getTemplateFile } from '../fs/reader.js';
-import { writeFile } from '../fs/writer.js';
 import { nowDateTime } from '../helpers/date.js';
 import { getCodegenMeta } from '../helpers/meta.js';
 import { Context } from './context.js';
@@ -29,7 +28,7 @@ export class Generator {
         await context.resolveUndefinedVars(content, this.file);
         const render = Handlebars.compile(content);
         const rendered = render(context.getAllVars());
-        await writeFile(this.options.output, targetFileName, rendered);
+        return { fileName: targetFileName, meta, content: rendered };
     }
     makeTargetFileName(file, name, meta) {
         return meta.target ? Handlebars.compile(meta.target)({ name }) : file.replace(/\.hbs$/, '');

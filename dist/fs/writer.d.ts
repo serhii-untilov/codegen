@@ -1,7 +1,14 @@
 /**
  * Write / patch files
  */
-export declare function writeFile(folderPath: string, fileName: string, content: string): Promise<void>;
-export declare function makeOutputFolder(outputRoot: string, templatePath: string, file: string, artifactName: string): Promise<string>;
-export declare function makeOutputFilePath(folder: string, file: string, artifactName: string): string;
-export declare function makeOutputFileName(file: string, artifactName: string): string;
+import { TemplateMeta } from '../engine/template-reader.js';
+export declare class Writer {
+    private readonly folderPath;
+    private readonly fileName;
+    private readonly meta;
+    constructor(folderPath: string, fileName: string, meta: TemplateMeta);
+    write(content: string): Promise<void>;
+}
+export declare function filePath(folderPath: string, fileName: string): Promise<string>;
+export declare function writeFile(folderPath: string, fileName: string, content: string): Promise<string>;
+export declare function fileExists(folderPath: string, fileName: string): Promise<boolean>;
