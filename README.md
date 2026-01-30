@@ -12,7 +12,7 @@ npm install -D github:serhii-untilov/codegen
 
 Create a `templates` folder in the root of your project.
 
-Create a template file, like a `templates\python.class\name.snakeCase.py.hbs`
+Create a template file, like a `templates\python.class\python.class.hbs`
 
 ``` hbs
 ---
