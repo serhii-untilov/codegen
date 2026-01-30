@@ -25,7 +25,7 @@ import { fileExists, writeFile, Writer } from './fs/writer.js';
 
         for (const file of templateFiles) {
             const { fileName, meta, content } = await new Generator(options, templatePath, file).run();
-            new Writer(options.output, fileName, meta).write(content);
+            new Writer(options.output).write(fileName, meta, content);
         }
 
         succeedSpinner('Done');

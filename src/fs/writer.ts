@@ -8,18 +8,14 @@ import path from 'path';
 import { TemplateMeta } from '../engine/template-reader.js';
 
 export class Writer {
-    constructor(
-        private readonly folderPath: string,
-        private readonly fileName: string,
-        private readonly meta: TemplateMeta,
-    ) {}
+    constructor(private readonly folderPath: string) {}
 
-    async write(content: string): Promise<void> {
-        const isExists = await fileExists(this.folderPath, this.fileName);
-        if (isExists && !this.meta.inject?.overwrite) {
-            console.log(chalk.yellow(`Skipping existing file: ${this.fileName}`));
-        } else if (!isExists && this.meta.inject?.mode === 'create') {
-            const fullPath = await writeFile(this.folderPath, this.fileName, content);
+    async write(fileName: string, meta: TemplateMeta, content: string): Promise<void> {
+        const isExists = await fileExists(this.folderPath, fileName);
+        if (isExists && !meta.inject?.overwrite) {
+            console.log(chalk.yellow(`Skipping existing file: ${fileName}`));
+        } else if (!isExists && meta.inject?.mode === 'create') {
+            const fullPath = await writeFile(this.folderPath, fileName, content);
             console.log(chalk.green(`Generated: ${fullPath}`));
         }
     }
